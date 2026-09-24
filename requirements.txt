@@ -1,0 +1,10 @@
+opencv-python
+numpy<2
+pandas
+scikit-learn
+albumentations
+torch
+torchvision
+facenet-pytorch
+insightface
+onnxruntime-gpu==1.20.2
