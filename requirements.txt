@@ -5,6 +5,7 @@ scikit-learn
 albumentations
 torch
 torchvision
+tensorboard
 facenet-pytorch
 insightface
 onnxruntime-gpu==1.20.2

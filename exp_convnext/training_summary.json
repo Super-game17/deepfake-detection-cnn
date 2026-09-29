@@ -1,0 +1,40 @@
+{
+  "model": "convnext_tiny",
+  "best_auc": 0.9101496713034976,
+  "best_model_path": "exp_convnext\\best_model.pth",
+  "test_metrics": {
+    "accuracy": 0.888229898345124,
+    "f1": 0.9318563121969157,
+    "roc_auc": 0.9342806315719829,
+    "confusion_matrix": [
+      [
+        9869,
+        2868
+      ],
+      [
+        6027,
+        60819
+      ]
+    ],
+    "loss": 0.7357662237600222
+  },
+  "best_validation_metrics": {
+    "accuracy": 0.8846380609236816,
+    "f1": 0.932939832444783,
+    "roc_auc": 0.9101496713034976,
+    "confusion_matrix": [
+      [
+        5018,
+        2644
+      ],
+      [
+        4400,
+        48998
+      ]
+    ],
+    "loss": 0.39439632434944283,
+    "epoch": 1,
+    "train_loss": 0.17310110786527091,
+    "val_loss": 0.39439632434944283
+  }
+}

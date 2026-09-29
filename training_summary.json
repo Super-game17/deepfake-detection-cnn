@@ -1,0 +1,40 @@
+{
+  "model": "resnet50",
+  "best_auc": 0.9110973573946445,
+  "best_model_path": "C:\\Users\\JEANJ\\Documents\\GitHub\\deepfake-detection-cnn\\best_model.pth",
+  "test_metrics": {
+    "accuracy": 0.8831660027895405,
+    "f1": 0.9285253059467438,
+    "roc_auc": 0.9202202634542507,
+    "confusion_matrix": [
+      [
+        9890,
+        2847
+      ],
+      [
+        6451,
+        60395
+      ]
+    ],
+    "loss": 1.1140615235311084
+  },
+  "best_validation_metrics": {
+    "accuracy": 0.8929249918113331,
+    "f1": 0.9380460532549986,
+    "roc_auc": 0.9110973573946445,
+    "confusion_matrix": [
+      [
+        5026,
+        2636
+      ],
+      [
+        3902,
+        49496
+      ]
+    ],
+    "loss": 0.33993855803108175,
+    "epoch": 1,
+    "train_loss": 0.1805439734283159,
+    "val_loss": 0.33993855803108175
+  }
+}
