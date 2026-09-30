@@ -6,6 +6,7 @@ albumentations
 torch
 torchvision
 tensorboard
+grad-cam
 facenet-pytorch
 insightface
 onnxruntime-gpu==1.20.2
