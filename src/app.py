@@ -1,5 +1,7 @@
+import os
 import tempfile
 import subprocess
+import urllib.request
 from pathlib import Path
 
 import cv2
@@ -13,6 +15,10 @@ from src.train_model import build_model
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 CHECKPOINT_PATH = ROOT_DIR / "best_model.pth"
+MODEL_URL = os.getenv(
+    "MODEL_URL",
+    "https://huggingface.co/SG-17/Deep-fake-detection-model/resolve/main/best_model.pth?download=true",
+)
 
 FRAME_INTERVAL = 15      # analyse 1 frame out of 15 (same as video_inference.py)
 MAX_ANALYZED_FRAMES = 60 # safety limit so long videos do not run forever
@@ -34,6 +40,31 @@ def get_device_name():
 
 
 # ------------------------------------------------------------------ loading
+@st.cache_resource(show_spinner=False)
+def ensure_checkpoint_available():
+    """Download the checkpoint once when it is not included in the deployment."""
+    if CHECKPOINT_PATH.exists() and CHECKPOINT_PATH.stat().st_size > 0:
+        return CHECKPOINT_PATH
+
+    CHECKPOINT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path = CHECKPOINT_PATH.with_suffix(".pth.download")
+    try:
+        st.info("Téléchargement du modèle (environ 90 Mo), veuillez patienter...")
+        with urllib.request.urlopen(MODEL_URL, timeout=120) as response:
+            with temporary_path.open("wb") as output:
+                while chunk := response.read(1024 * 1024):
+                    output.write(chunk)
+        if temporary_path.stat().st_size == 0:
+            raise RuntimeError("Le fichier téléchargé est vide.")
+        os.replace(temporary_path, CHECKPOINT_PATH)
+        return CHECKPOINT_PATH
+    except (OSError, RuntimeError) as error:
+        temporary_path.unlink(missing_ok=True)
+        raise RuntimeError(
+            f"Impossible de télécharger le modèle depuis Hugging Face: {error}"
+        ) from error
+
+
 @st.cache_resource
 def load_classifier(checkpoint_path, device_name):
     checkpoint = torch.load(str(checkpoint_path), map_location="cpu", weights_only=False)
@@ -245,11 +276,10 @@ device_name = get_device_name()
 st.sidebar.write(f"Device: **{device_name.upper()}**")
 st.sidebar.write("Label 0 = Real, label 1 = Fake")
 
-if not CHECKPOINT_PATH.exists():
-    st.error(
-        f"'{CHECKPOINT_PATH.name}' was not found next to app.py. "
-        "Ask your teammate to send best_model.pth and put it in the project root."
-    )
+try:
+    CHECKPOINT_PATH = ensure_checkpoint_available()
+except RuntimeError as error:
+    st.error(str(error))
     st.stop()
 
 mode = st.radio("Input type", ["Video", "Image"], horizontal=True)
