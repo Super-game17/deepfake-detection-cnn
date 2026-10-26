@@ -1,4 +1,5 @@
 opencv-python
+imageio-ffmpeg
 numpy<2
 pandas
 scikit-learn
@@ -6,6 +7,8 @@ albumentations
 torch
 torchvision
 tensorboard
+streamlit
+Pillow
 grad-cam
 facenet-pytorch
 insightface
